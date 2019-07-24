@@ -10,7 +10,8 @@ module.exports = {
         }
         catch(err){
             res.status(500).send({
-                error:err
+                error:'an error has occured trying to fetch all the songs',
+                err:err
             })
         }
     },
@@ -25,4 +26,33 @@ module.exports = {
         })
         }
       },
+    async show(req, res){
+        try{    
+            const song = await Song.findAll({
+                where:{id:req.params.id}
+            })
+            res.send(song)
+
+        }catch(err){
+            res.status(500).json({
+                error:'an error has occured trying to fetch the song id',
+                err:err
+            })
+
+        }
+    },
+    async put(req, res){
+        try{
+            await Song.update(req.body,{where: {id:req.params.id}})
+            const song = await Song.findAll({
+                where:{id:req.params.id}
+            })
+            res.send(song)
+
+        }catch(err){
+            res.status(500).json({
+                error:'an error has occured trying to update the song'
+            })
+        }
+    }
 }

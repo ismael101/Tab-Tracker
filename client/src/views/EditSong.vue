@@ -3,7 +3,7 @@
         <div v-if="error">
           <v-alert :value="true" type='error'>{{error}}</v-alert>
         </div>
-        <Panel title='Create Song'>
+        <Panel title='Edit Song'>
             <v-text-field
           label="Title"
           required
@@ -62,8 +62,8 @@
           v-model="song.lyrics"
         ></v-textarea>
 
-             <v-btn v-on:click='submit' color='primary'>
-                 Submit
+             <v-btn v-on:click='save' color='primary'>
+                 Save
              </v-btn>
         </Panel>
     </div>
@@ -73,30 +73,22 @@
 import Panel from '../components/Panel'
 import Songs from '../../services/Songs'
 
+
 export default {
-    name:'CreateSong',
-    data(){
-        return{
-        song: {
-            title: null,
-            artist: null,
-            genre: null,
-            album:null,
-            albumImageUrl:null,
-            youtubeId:null,
-            lyrics:null,
-            tab:null
-        },
-        error: null,
+    data () {
+    return {
+      song: {
+      },
+      error: null,
       required: (value) => !!value || 'Required.'
-        }
-    },
-    components:{
-        Panel
-    },
-    methods:{
-        async submit(){
-          this.error = null
+    }
+  },
+  components:{
+      Panel
+  },
+  methods: {
+    async save () {
+      this.error = null
       const areAllFieldsFilledIn = Object
         .keys(this.song)
         .every(key => !!this.song[key])
@@ -104,16 +96,28 @@ export default {
         this.error = 'Please fill in all the required fields.'
         return
       }
+      const songId = this.$route.params.id
       try {
-        await Songs.post(this.song)
+        await Songs.put(songId,this.song)
         this.$router.push({
-          name: 'songs'
+          name: 'song',
+          params: {
+            songId: songId
+          }
         })
       } catch (err) {
         console.log(err)
       }
-        }
     }
+  },
+  async mounted () {
+   const songId = this.$route.params.id
+        let song = (await Songs.show(songId)).data
+        song.forEach(element => {
+            this.song = element
+        });
+  }
+
 }
 </script>
 

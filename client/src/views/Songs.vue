@@ -22,13 +22,10 @@
                         <h2>Artist: {{song.artist}}</h2>
                         <h2>Album: {{song.album}}</h2>
                         <h2>Genre: {{song.genre}}</h2>
-                        <v-btn 
-                        light
-                        class='cyan accent-2'
-                        @click="navigateTo({name:'song',params:{id:song.id}})"
-                        >
-                            View
-                        </v-btn>
+                        <v-btn-toggle>
+                        <v-btn light class='cyan accent-2' @click="navigateTo({name:'edit', params:{id:song.id}})">Edit</v-btn>
+                        <v-btn light class='cyan accent-2' @click="navigateTo({name:'song',params:{id:song.id}})">View</v-btn>
+                        </v-btn-toggle>
                     </v-flex>
                     <v-flex xs6>
                         <img :src='song.albumImageUrl'>

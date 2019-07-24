@@ -3,7 +3,9 @@
         <v-toolbar-title class='mr-4'>
             TabTracker
         </v-toolbar-title>
+        <v-toolbar-items>
         <v-btn flat dark @click="navigate({name:'songs'})">Browse</v-btn>
+        </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items v-if='!$store.state.isUserLoggedIn'>
             <v-btn @click="navigate({name:'login'})" flat dark>Login</v-btn>
