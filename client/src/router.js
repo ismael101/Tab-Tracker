@@ -41,6 +41,10 @@ export default new Router({
       path:'/songs/edit/:id',
       name:'edit',
       component:EditSong
+    },
+    {
+      path: '*',
+      redirect: 'songs'
     }
   ]
 })

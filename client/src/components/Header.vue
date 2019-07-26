@@ -11,6 +11,9 @@
             <v-btn @click="navigate({name:'login'})" flat dark>Login</v-btn>
             <v-btn @click="navigate({name:'register'})" flat dark>Signup</v-btn>
         </v-toolbar-items>
+        <v-toolbar-items v-if='$store.state.isUserLoggedIn'>
+            <v-btn  @click='logout(),navigate({name:"login"})' flat dark>Logout</v-btn>
+        </v-toolbar-items>
     </v-toolbar>
 </template>
 
@@ -24,6 +27,7 @@ export default {
         logout(){
             this.$store.dispatch('setToken', null)
             this.$store.dispatch('setUser', null)
+            this.$router.push('songs')
         }
     }
 }

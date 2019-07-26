@@ -3,7 +3,7 @@
         <div v-if="error">
           <v-alert :value="true" type='error'>{{error}}</v-alert>
         </div>
-        <Panel title='Edit Song'>
+        <panel title='Edit Song'>
             <v-text-field
           label="Title"
           required
@@ -65,12 +65,11 @@
              <v-btn v-on:click='save' color='primary'>
                  Save
              </v-btn>
-        </Panel>
+        </panel>
     </div>
 </template>
 
 <script>
-import Panel from '../components/Panel'
 import Songs from '../../services/Songs'
 
 
@@ -83,9 +82,6 @@ export default {
       required: (value) => !!value || 'Required.'
     }
   },
-  components:{
-      Panel
-  },
   methods: {
     async save () {
       this.error = null
@@ -94,7 +90,7 @@ export default {
         .every(key => !!this.song[key])
       if (!areAllFieldsFilledIn) {
         this.error = 'Please fill in all the required fields.'
-        return
+        return 
       }
       const songId = this.$route.params.id
       try {

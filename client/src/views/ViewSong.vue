@@ -13,7 +13,24 @@
                     <v-flex xs6>
                         <v-img :src='song.albumImageUrl'></v-img>
                     </v-flex>
+                    
                     </v-layout>
+                            <v-btn
+                            v-if="isUserLoggedIn && !bookmark"
+                            dark
+                            class="cyan"
+                            @click="setAsBookmark">
+                            Set As Bookmark
+                            </v-btn>
+
+                            <v-btn
+                            v-if="isUserLoggedIn && bookmark"
+                            dark
+                            class="cyan"
+                            @click="unsetAsBookmark">
+                            Unset As Bookmark
+                            </v-btn>
+ 
             </panel>
         </v-flex> 
         <v-flex xs6 order-lg2 class='pl-4 pr-4 pt-2 pb-2'>
@@ -42,15 +59,13 @@
 
 <script>
 import Songs from '../../services/Songs'
-import Panel from '../components/Panel'
-
+import {mapState} from 'vuex'
+import Bookmarks from '../../services/Bookmarks'
 export default {
-    components:{
-        Panel
-    },
     data(){
         return{
-            song:{}
+            song:{},
+            bookmark: null
         }
     },
     async mounted(){
@@ -61,7 +76,49 @@ export default {
             this.song = element
         });
 
+    },
+    computed: {
+    ...mapState([
+      'isUserLoggedIn',
+      'user'
+    ])
+  },
+    watch: {
+        async song () {
+        if (!this.isUserLoggedIn) {
+            return
+        }
+        try {
+            const bookmarks = (await Bookmarks.index({
+            songId: this.song.id
+            })).data
+            if (bookmarks.length) {
+            this.bookmark = bookmarks[0]
+            }
+        } catch (err) {
+            console.log(err)
+        }
+        }
+    },
+    methods: {
+    async setAsBookmark () {
+      try {
+        this.bookmark = (await Bookmarks.post({
+          songId: this.song.id
+        })).data
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async unsetAsBookmark () {
+      try {
+        await Bookmarks.delete(this.bookmark.id)
+        this.bookmark = null
+      } catch (err) {
+        console.log(err)
+      }
     }
+  }
 
 }
 </script>

@@ -3,7 +3,7 @@
         <div v-if="error">
           <v-alert :value="true" type='error'>{{error}}</v-alert>
         </div>
-        <Panel title='Create Song'>
+        <panel title='Create Song'>
             <v-text-field
           label="Title"
           required
@@ -65,12 +65,11 @@
              <v-btn v-on:click='submit' color='primary'>
                  Submit
              </v-btn>
-        </Panel>
+        </panel>
     </div>
 </template>
 
 <script>
-import Panel from '../components/Panel'
 import Songs from '../../services/Songs'
 
 export default {
@@ -90,9 +89,6 @@ export default {
         error: null,
       required: (value) => !!value || 'Required.'
         }
-    },
-    components:{
-        Panel
     },
     methods:{
         async submit(){
